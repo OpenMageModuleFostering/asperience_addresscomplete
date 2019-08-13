@@ -11,7 +11,10 @@
     <modules>
         <Asperience_Addresscomplete>
             <active>true</active>
-            <codePool>local</codePool>
+            <codePool>community</codePool>
         </Asperience_Addresscomplete>
     </modules>
+    <depends>
+    	<Asperience_Notificationmanager/>
+    </depends>
 </config>

@@ -1,0 +1,28 @@
+<?php
+/**
+ * @category   ASPerience
+ * @package    Asperience_Addresscomplete
+ * @author     ASPerience - www.asperience.fr
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php
+/**
+ * Google MAPS API Call
+ */
+?>
+<?php 
+if (Mage::getStoreConfig('asperience_addresscomplete/addresscomplete/google_maps')) {
+    $key = Mage::getStoreConfig('asperience_addresscomplete/addresscomplete/google_maps_api_key');
+    if ( $key ) {?>
+<!-- ASPerience_Addresscomplete : GOOGLE MAPS ACTIVATED PRODUCTION MODE -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key=<?php echo $key?>"></script>
+    <?php } else { ?>
+<!-- ASPerience_Addresscomplete : GOOGLE MAPS ACTIVATED DEVELOPER MODE -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places"></script>
+<?php }
+} else { ?>
+<!-- ASPerience_Addresscomplete : GOOGLE MAPS NOT ACTIVATED -->
+<?php 
+}
+?>

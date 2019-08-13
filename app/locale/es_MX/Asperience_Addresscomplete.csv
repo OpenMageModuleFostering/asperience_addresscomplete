@@ -32,3 +32,4 @@
                     2) Une liste des codes postaux et villes quand la ville à été partiellement entrée <br/> 
                     3) Une auto-complétion complète basée sur l'API Google Maps lorsque l'adresse est partiellement entrée <br/>
 					Pour financer une de ces fonctionnalités, ou une autre, veuillez contacter <a href=""mailto:contact@asperience.fr"">contact@asperience.fr</a>"
+"State/Province:","Zona postal:"

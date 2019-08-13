@@ -3,7 +3,7 @@
     "type": "magento-module",
     "license": "Open-Software-License-(OSL-3.0)",
     "homepage": "",
-    "description": "Module permettant d'auto-compléter les adresses du frontend à partir du code postal.",
+    "description": "This module gives possibility to complete addresses (by postcode+country or by Google Maps API)",
     "authors": [
     {
         "name": "Jean-S\u00e9bastien Hederer",
