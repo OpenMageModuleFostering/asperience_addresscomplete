@@ -113,11 +113,6 @@
                         ->addValuesToNameSuffixElement($_address->getSuffix());
             ?>
             <?php echo $this->getForm()->getHtml() ?>
-            <div id="address_autocomplete_<?php echo $_address->getId() ?>" class="address-autocomplete"></div>
-            <div id="alert_<?php echo $_address->getId() ?>" style="display:none;" class="validation-advice"><?php echo $this->__('The zip code is incorrect.') ?></div>
-            <span id="address_img_wait_<?php echo $_address->getId() ?>" style="display:none;" class="opc-please-wait">
-                <br/><img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle" alt="" />
-            </span>
             <input type="hidden" name="address[<?php echo $_address->getId() ?>][_deleted]" id="deleted_address_item_<?php echo $_address->getId() ?>" />
             </div>
             <?php endforeach; ?>
@@ -125,7 +120,6 @@
             <div id="no_address_message"><?php echo Mage::helper('customer')->__('This customer has no saved addresses.') ?></div>
         <?php endif; ?>
     </div>
-
 <?php 
 $google_maps = Mage::getStoreConfig('asperience_addresscomplete/addresscomplete/google_maps');
 if ($google_maps) {
@@ -152,35 +146,38 @@ function initializeAddressComplete(itemId) {
     if(itemId != null) {
         if(typeof(itemId) == "string") {
             numItemId = itemId.replace(/address_item_/, '').replace(/new_item/, '');
+        } else {
+            numItemId = itemId;
         }
-        delete searchZipCode;
-        searchZipCode = new SearchZipCode('', '_item'+numItemId+'postcode', 
-            '_item'+numItemId+'city', '_item'+numItemId+'region_id', 
-            '_item'+numItemId+'country_id', 'address_img_wait_'+numItemId, 
-            'address_autocomplete_'+numItemId, '<?php echo $this->__('Zip code search...') ?>', '<?php echo $this->helper('addresscomplete')->getCountryUrl() ?>',
-            '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', 'alert_'+numItemId, true);
+        if($('address_autocomplete_'+numItemId) == undefined) {
+            autocomplete = "            <div id='address_autocomplete_"+numItemId+"' class='address-autocomplete'></div>";+
+            Element.insert($('_item'+numItemId+'postcode'), {bottom: autocomplete});
+    
+            searchZipCode = new SearchZipCode('', '_item'+numItemId+'postcode', 
+                '_item'+numItemId+'city', '_item'+numItemId+'region_id', 
+                '_item'+numItemId+'country_id', 'loading-mask', 
+                'address_autocomplete_'+numItemId, '<?php echo $this->__('Zip code search...') ?>', '<?php echo $this->helper('addresscomplete')->getCountryUrl() ?>',
+                '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', true);
 
 <?php if ($google_maps) { ?>
-        delete editGoogleAddressAutocomplete;
-        editGoogleAddressAutocomplete = new GoogleAddressAutocomplete('_item'+numItemId+'postcode', 
-                '_item'+numItemId+'city', '_item'+numItemId+'region_id', 
-                '_item'+numItemId+'region', '_item'+numItemId+'country_id', 
-                'address_img_wait_'+numItemId,  
-                '_item'+numItemId+'street0', '_item'+numItemId+'street1',
-                 '_item'+numItemId+'formatted_address', '_item'+numItemId+'lat', 
-                 '_item'+numItemId+'long', '_item'+numItemId+'url', searchZipCode, true);
-        if(editGoogleAddressAutocomplete.autocompleteAddress != null) {
-            google.maps.event.addListener(editGoogleAddressAutocomplete.autocompleteAddress, "place_changed", function(event) {editGoogleAddressAutocomplete.fillInAddress()});
-            Event.observe(editGoogleAddressAutocomplete.fStreet1,'focus', function(event) {editGoogleAddressAutocomplete.setAutocompleteCountry()});
-            Event.observe(editGoogleAddressAutocomplete.fCountry,'change', function(event) {editGoogleAddressAutocomplete.setAutocompleteCountry()});
-        }
+            editGoogleAddressAutocomplete = new GoogleAddressAutocomplete('_item'+numItemId+'postcode', 
+                    '_item'+numItemId+'city', '_item'+numItemId+'region_id', 
+                    '_item'+numItemId+'region', '_item'+numItemId+'country_id', 
+                    'loading-mask',
+                    '_item'+numItemId+'street0', '_item'+numItemId+'street1',
+                    '_item'+numItemId+'formatted_address', '_item'+numItemId+'lat', 
+                    '_item'+numItemId+'long', '_item'+numItemId+'url', searchZipCode, true);
+            if(editGoogleAddressAutocomplete.autocompleteAddress != null) {
+                google.maps.event.addListener(editGoogleAddressAutocomplete.autocompleteAddress, 'place_changed', function(event) {editGoogleAddressAutocomplete.fillInAddress()});
+                Event.observe(editGoogleAddressAutocomplete.fStreet1,'focus', function(event) {editGoogleAddressAutocomplete.street1Focus()});
+                Event.observe(editGoogleAddressAutocomplete.fCountry,'change', function(event) {editGoogleAddressAutocomplete.setAutocompleteCountry()});
+            }
 <?php } ?>
+        }
     }
 }
-
 //]]>
 </script>
-
 <script type="text/javascript">
 //<![CDATA[
 var deleteButtonId = <?php echo $_iterator ?>;
@@ -224,9 +221,6 @@ addressesModel.prototype = {
         this.setActiveItem(this.itemList[0]);
         this.setAddressAsDefault();
         this.bindCountryRegionRelation();
-        //Asperience_Addresscomplete 
-        if(this.itemList[0])
-            initializeAddressComplete(this.itemList[0].id);
     },
 
     reloadItemList : function(initial){
@@ -252,7 +246,7 @@ addressesModel.prototype = {
             $('form_'+item.id).addressItem = item;
 
             // set Zip optional/required
-            var countryElement = $('_item' + item.id.replace(/address_item_/, '') + 'country_id');
+            var countryElement = $('_item' + item.id.replace(/address_item_/, '').replace(/new_item/, '') + 'country_id');
             varienGlobalEvents.fireEvent("address_country_changed", countryElement);
         }
     },
@@ -305,24 +299,12 @@ addressesModel.prototype = {
             newForm.statusBar = newItem;
             newForm.addressItem = newItem;
 
-            //Asperience_Addresscomplete 
-            autocomplete = "            <div id='address_autocomplete_"+this.itemCount+"' class='address-autocomplete'></div>"+
-                           "            <div id='alert_"+this.itemCount+"' style='display:none;' class='validation-advice'><?php echo $this->__('The zip code is incorrect.') ?></div>"+
-                           "            <span id='address_img_wait_"+this.itemCount+"' style='display:none;' class='opc-please-wait'>"+
-                           "            <br/><img src='<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>' class='v-middle' alt='' />"+
-                           "            </span>"
-            Element.insert(this.itemContainer, {bottom: autocomplete});
-            
             this.addItemObservers(newItem);
             this.setActiveItem(newItem);
             this.bindCountryRegionRelation(newForm.id);
 
             if( $('_item'+this.itemCount+'firstname').value ) this.syncFormData($('_item'+this.itemCount+'firstname'));
             if( $('_item'+this.itemCount+'lastname').value ) this.syncFormData($('_item'+this.itemCount+'lastname'));
-
-            //Asperience_Addresscomplete 
-            initializeAddressComplete(this.itemCount);
-            
         }
         this.reloadItemList();
         //Event.stop(event);
@@ -410,9 +392,9 @@ addressesModel.prototype = {
             //new Effect.Appear($('form_'+item.id), {duration : 0.3 });
             //$('form_'+item.id).focus();
             this.addFieldChangeObserver($('form_'+item.id));
-            var regionIdElement = $('_item' + item.id.replace(/address_item_/, '') + 'region_id');
-            var regionElement = $('_item' + item.id.replace(/address_item_/, '') + 'region');
-            this.countryEl = $('_item' + item.id.replace(/address_item_/, '') + 'country_id');
+            var regionIdElement = $('_item' + item.id.replace(/address_item_/, '').replace(/new_item/, '') + 'region_id');
+            var regionElement = $('_item' + item.id.replace(/address_item_/, '').replace(/new_item/, '') + 'region');
+            this.countryEl = $('_item' + item.id.replace(/address_item_/, '').replace(/new_item/, '') + 'country_id');
             if (regionIdElement && regionElement) {
                 var actualId = regionElement.id;
                 if (('select' == regionIdElement.tagName.toLowerCase()) && regionIdElement) {
@@ -426,7 +408,6 @@ addressesModel.prototype = {
         //Asperience_Addresscomplete 
         if(item)
             initializeAddressComplete(item.id);
-        
     },
 
     getFormContainerFields : function(container){
@@ -685,19 +666,19 @@ addressesModel.prototype = {
                 if (currentElement.hasClassName('required-entry')) {
                     currentElement.removeClassName('required-entry');
                 }
-                if ('select' == currentElement.tagName.toLowerCase() &&
-                    currentElement.hasClassName('validate-select')
-                ) {
-                    currentElement.removeClassName('validate-select');
+                if ('select' == currentElement.tagName.toLowerCase()) {
+                    if(currentElement.hasClassName('validate-select')) {
+                        currentElement.removeClassName('validate-select');
+                    }
                 }
             } else if (activeElementId == currentElement.id) {
                 if (!currentElement.hasClassName('required-entry')) {
                     currentElement.addClassName('required-entry');
                 }
-                if ('select' == currentElement.tagName.toLowerCase() &&
-                    !currentElement.hasClassName('validate-select')
-                ) {
-                    currentElement.addClassName('validate-select');
+                if ('select' == currentElement.tagName.toLowerCase()) {
+                    if (!currentElement.hasClassName('validate-select')) {
+                        currentElement.addClassName('validate-select');
+                    }
                 }
             }
         });
@@ -707,7 +688,6 @@ addressesModel.prototype = {
 customerAddresses = new addressesModel();
 //]]>
 </script>
-
 </td>
 </tr>
 </table>

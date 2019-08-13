@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category   ASPerience
+ * @package    Asperience_Addresscomplete
+ * @author     ASPerience - www.asperience.fr
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<config>
+   <modules>
+      <Asperience_Addresscomplete>
+         <version>0.3.1</version>
+      </Asperience_Addresscomplete>
+   </modules>
+   <global>
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                     <customer_edit_tab_addresses>Asperience_Addresscomplete_Block_Adminhtml_Customer_Edit_Tab_Addresses</customer_edit_tab_addresses>
+                </rewrite>
+            </adminhtml>
+            <addresscomplete>
+                <class>Asperience_Addresscomplete_Block</class>
+            </addresscomplete>
+        </blocks>
+        
+        <helpers>
+            <addresscomplete>
+                <class>Asperience_Addresscomplete_Helper</class>
+            </addresscomplete>
+        </helpers>
+
+        <models>
+            <addresscomplete>
+                <class>Asperience_Addresscomplete_Model</class>
+                <resourceModel>addresscomplete_mysql4</resourceModel>
+            </addresscomplete>
+            
+            <addresscomplete_mysql4>
+                <class>Asperience_Addresscomplete_Model_Mysql4</class>
+                <entities>
+                    <city>
+                        <table>directory_country_city</table>
+                    </city>
+                </entities>
+               </addresscomplete_mysql4>
+          </models>
+          
+        <resources>
+            <addresscomplete_setup>
+               <setup>
+                  <module>Asperience_Addresscomplete</module>
+                  <class>Mage_Customer_Model_Entity_Setup</class>
+               </setup>
+               <connection>
+                  <use>core_setup</use>
+               </connection>
+            </addresscomplete_setup>
+
+            <addresscomplete_write>
+               <connection>
+                  <use>core_write</use>
+               </connection>
+            </addresscomplete_write>
+
+            <addresscomplete_read>
+               <connection>
+                  <use>core_read</use>
+               </connection>
+            </addresscomplete_read>
+        </resources>
+		<fieldsets>
+            <customer_address>
+                <formatted_address><to_quote_address>*</to_quote_address></formatted_address>
+                <lat><to_quote_address>*</to_quote_address></lat>
+                <long><to_quote_address>*</to_quote_address></long>
+                <url><to_quote_address>*</to_quote_address></url>
+            </customer_address>
+            <sales_convert_quote_address>
+                <formatted_address><to_order_address>*</to_order_address><to_customer_address>*</to_customer_address></formatted_address>
+                <lat><to_order_address>*</to_order_address><to_customer_address>*</to_customer_address></lat>
+                <long><to_order_address>*</to_order_address><to_customer_address>*</to_customer_address></long>
+                <url><to_order_address>*</to_order_address><to_customer_address>*</to_customer_address></url>
+            </sales_convert_quote_address>
+            <sales_convert_order_address>
+                <formatted_address><to_quote_address>*</to_quote_address></formatted_address>
+                <lat><to_quote_address>*</to_quote_address></lat>
+                <long><to_quote_address>*</to_quote_address></long>
+                <url><to_quote_address>*</to_quote_address></url>
+            </sales_convert_order_address>
+            <sales_copy_order_billing_address>
+                <formatted_address><to_order>*</to_order></formatted_address>
+                <lat><to_order>*</to_order></lat>
+                <long><to_order>*</to_order></long>
+                <url><to_order>*</to_order></url>
+            </sales_copy_order_billing_address>
+            <sales_copy_order_shipping_address>
+                <formatted_address><to_order>*</to_order></formatted_address>
+                <lat><to_order>*</to_order></lat>
+                <long><to_order>*</to_order></long>
+                <url><to_order>*</to_order></url>
+            </sales_copy_order_shipping_address>
+        </fieldsets>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <addresscomplete>
+                        <type>singleton</type>
+                        <class>addresscomplete/observer</class>
+                        <method>onCoreBlockAbstractToHtmlAfter</method>
+                    </addresscomplete>
+                </observers>
+            </core_block_abstract_to_html_after>        
+        </events>
+        <template>
+            <email>
+                <asperience_addresscomplete_synchronize_template translate="label" module="addresscomplete">
+                    <label>Synchronize countries postcodes Email</label>
+                    <file>asperience/addresscomplete/synchronize.html</file>
+                    <type>html</type>
+                </asperience_addresscomplete_synchronize_template>
+            </email>
+        </template>
+    </global>
+	<default>
+		<asperience_addresscomplete>
+			<addresscomplete>
+				<source>internal</source>
+				<email_template>asperience_addresscomplete_synchronize_template</email_template>
+				<email_sender>general</email_sender>          
+				<default_postcode_max_results>20</default_postcode_max_results>
+				<default_detect_region_first_2_chars>yes</default_detect_region_first_2_chars>
+				<default_detect_postcode_like_start>yes</default_detect_postcode_like_start>
+				<google_maps>yes</google_maps>
+			</addresscomplete>
+		</asperience_addresscomplete>
+	</default>
+
+    <frontend>
+        <routers>
+            <Asperience_Addresscomplete>
+                <use>standard</use>
+                <args>
+                    <module>Asperience_Addresscomplete</module>
+                    <frontName>addresscomplete</frontName>
+                </args>
+            </Asperience_Addresscomplete>
+        </routers>
+
+        <layout>
+            <updates>
+                <addresscomplete module="Asperience_Addresscomplete">
+                    <file>asperience/addresscomplete.xml</file>
+                </addresscomplete>
+            </updates>
+        </layout>
+        
+        <translate>
+            <modules>
+                <Asperience_Addresscomplete>
+                    <files>
+                        <default>Asperience_Addresscomplete.csv</default>
+                    </files>
+                </Asperience_Addresscomplete>
+            </modules>
+        </translate>
+    </frontend>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <addresscomplete module="Asperience_Addresscomplete">
+                    <file>asperience/addresscomplete.xml</file>
+                </addresscomplete>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Asperience_Addresscomplete>
+                    <files>
+                        <default>Asperience_Addresscomplete.csv</default>
+                    </files>
+                </Asperience_Addresscomplete>
+            </modules>
+        </translate>        
+    </adminhtml>
+    
+    <crontab>
+        <jobs>
+            <addresscomplete_cron>
+                <schedule>
+<!-- 
+                    <cron_expr>* * * * *</cron_expr>
+ -->
+                    <cron_expr>0 2 1 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>addresscomplete/cron::loadCountries</model>
+                </run>
+            </addresscomplete_cron>
+        </jobs>
+    </crontab> 
+
+</config>

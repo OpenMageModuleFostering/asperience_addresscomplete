@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * @category   ASPerience
+ * @package    Asperience_AddressComplete
+ * @author     ASPerience - www.asperience.fr
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<config>
+    <sections>
+        <asperience_addresscomplete translate="label" module="addresscomplete">
+            <label>ASPerience Address Auto-completer</label>
+            <tab>sales</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>315</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>        
+            <groups>
+            	<addresscomplete translate="label">
+                    <label>Address Auto-completer</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[ASPerience Address Auto-completer proposes front-end users and backend users to choose a zip code and city when choosing a country and entering partial zip code. <br/>
+                    It also proposes google maps auto-completion<br/>
+                    Future versions may contain list of zip and city when city is partialy input <br/> 
+					For funding this feature, or others, please contact <a href="mailto:contact@asperience.fr">contact@asperience.fr</a>]]></comment>
+                    <fields>
+                        <source translate="label">
+                            <label>Data source</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>addresscomplete/source</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[External auto-completer will be available on a future version. If you are interested in funding this tool, please contact <a href="mailto:contact@asperience.fr">contact@asperience.fr</a>]]></comment>
+                        </source>
+                        <api_key translate="label">
+                            <label>API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><source>external</source></depends>
+                        </api_key>
+                        <loadcountry translate="label">
+                            <label><![CDATA[Synchronize regions and city countries <br/>(synchronization will be made on next cron call. Cron call is configurated in module file config.xml. If you want paid support on this, or want to fund a button for direct call to synchronization please contact <a href="mailto:contact@asperience.fr">contact@asperience.fr.</a> )]]></label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>20</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><source>internal</source></depends>
+                        </loadcountry>
+                        <email_sender translate="label">
+                            <label>Synchronization Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><source>internal</source></depends>
+                        </email_sender>                         
+                        <email_recipient translate="label">
+                            <label>Synchronization Email Recipient</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>22</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>separate by ','</comment>  
+                            <depends><source>internal</source></depends>
+                        </email_recipient>
+                        <email_template translate="label">
+                            <label>Email Address Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>23</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><source>internal</source></depends>
+                        </email_template>                        
+                        <default_postcode_max_results translate="label">
+                            <label>Maximum number of results proposed in selection list</label>
+                            <validate>validate-digits</validate>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_postcode_max_results>
+                        <default_detect_region_first_2_chars translate="label">
+                            <label>If postcode is not found in datas, detect region on first 2 chars of postcode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>51</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_detect_region_first_2_chars>
+                        <default_detect_region_first_1_char translate="label">
+                            <label>If postcode is not found in datas, and no result in detect region on first 2 chars of postcode, detect region on first char of postcode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>52</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <!--depends><default_detect_region_first_2_chars>yes</default_detect_region_first_2_chars></depends-->
+                        </default_detect_region_first_1_char>
+                        <default_detect_postcode_like_start translate="label">
+                            <label>Search postcodes that start with input (like 'input%') (priority 1)</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_detect_postcode_like_start>
+                        <default_detect_postcode_like_middle translate="label">
+                            <label>Search postcodes that contain input (like '%input%') (priority 2)</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>61</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_detect_postcode_like_middle>
+                        <default_detect_postcode_like_full translate="label">
+                            <label>Search postcodes that are similar to input (like '%i%n%p%u%t%') (priority 3)</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>62</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_detect_postcode_like_full>
+                        <google_maps translate="label">
+                            <label>Auto-complete address whith google maps API</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </google_maps>
+                        <google_maps_api_key translate="label">
+                            <label>Google MAPS API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>71</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><google_maps>1</google_maps></depends>
+                        </google_maps_api_key>                        
+                    </fields>
+            	</addresscomplete>
+            </groups>
+        </asperience_addresscomplete>
+    </sections>
+</config>

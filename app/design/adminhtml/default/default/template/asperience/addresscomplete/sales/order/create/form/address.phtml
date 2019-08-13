@@ -80,10 +80,6 @@ endif; ?>
             <?php Mage::log(get_class($this->getForm())) ?>
             <?php echo $this->getForm()->toHtml() ?>
             <div id="<?php echo $_addressFieldsIdPrefix?>_autocomplete" class="address-autocomplete"></div>
-            <div id="alert_<?php echo $_addressFieldsIdPrefix ?>" style="display:none;" class="validation-advice"><?php echo $this->__('The zip code is incorrect.') ?></div>
-            <span id="<?php echo $_addressFieldsIdPrefix?>_img_wait" style="display:none;" class="opc-please-wait">
-                <br/><img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle" alt="" />
-		    </span>
         </div>
         <div class="order-save-in-address-book">
             <input name="<?php echo $this->getForm()->getHtmlNamePrefix()?>[save_in_address_book]" type="checkbox" id="<?php echo $this->getForm()->getHtmlIdPrefix()?>save_in_address_book" value="1" <?php if (!$this->getDontSaveInAddressBook() && $this->getAddress()->getSaveInAddressBook()):?> checked="checked"<?php endif;?>/>
@@ -107,25 +103,25 @@ endif; ?>
         var <?php echo $_addressVarsPrefix ?>ZipCode = new SearchZipCode('', addressFieldsIdPrefix+'postcode', 
             addressFieldsIdPrefix+'city', addressFieldsIdPrefix+'region_id', 
             addressFieldsIdPrefix+'country_id', 
-            addressFieldsIdPrefix+'_img_wait', 
+            '',
             addressFieldsIdPrefix+'_autocomplete', '<?php echo $this->__('Zip code search...') ?>', 
             '<?php echo $this->helper('addresscomplete')->getCountryUrl() ?>',
             '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', 
             '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', 
-            'alert_'+addressFieldsIdPrefix, true);
+            true);
             
         <?php if (Mage::getStoreConfig('asperience_addresscomplete/addresscomplete/google_maps')) { ?>
         var <?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete=new GoogleAddressAutocomplete(addressFieldsIdPrefix+'postcode', 
             addressFieldsIdPrefix+'city', addressFieldsIdPrefix+'region_id', 
             addressFieldsIdPrefix+'region', addressFieldsIdPrefix+'country_id', 
-            addressFieldsIdPrefix+'_img_wait', 
+            '',
             addressFieldsIdPrefix+'street0', addressFieldsIdPrefix+'street1',
             addressFieldsIdPrefix+'formatted_address', addressFieldsIdPrefix+'lat', 
             addressFieldsIdPrefix+'long', addressFieldsIdPrefix+'url', 
             <?php echo $_addressVarsPrefix ?>ZipCode, true);
         if(<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.autocompleteAddress != null) {
             google.maps.event.addListener(<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.autocompleteAddress, "place_changed", function(event) {<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.fillInAddress()});
-            Event.observe(<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.fStreet1,'focus', function(event) {<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.setAutocompleteCountry()});
+            Event.observe(<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.fStreet1,'focus', function(event) {<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.street1Focus()});
             Event.observe(<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.fCountry,'change', function(event) {<?php echo $_addressVarsPrefix ?>GoogleAddressAutocomplete.setAutocompleteCountry()});
         }
         <?php } ?>

@@ -117,7 +117,6 @@
 	                    <div class="input-box">
 	                        <input type="text" name="postcode" value="<?php echo $this->htmlEscape($this->getFormData()->getPostcode()) ?>" title="<?php echo $this->__('Zip/Postal Code') ?>" id="zip" class="input-text validate-zip-international required-entry" />
 		                    <div id="address_autocomplete" class="address-autocomplete"></div>
-			                <div id="alert" style="display:none;" class="validation-advice"><?php echo $this->__('The zip code is incorrect.') ?></div>
 		                </div>
 	                </div>
 	                <span id="img_wait" style="display:none;" class="opc-please-wait">
@@ -191,14 +190,14 @@
  	// Asperience_Addresscomplete : Javascipt
  	var registerSearchZipCode = new SearchZipCode('form-validate', 'zip', 'city', 'region_id', 'country', 'img_wait', 
 		'address_autocomplete', '<?php echo $this->__('Zip code search...') ?>', '<?php echo $this->helper('addresscomplete')->getCountryUrl() ?>',
-	    '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', 'alert',false
+	    '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', false
 	);
 <?php if (Mage::getStoreConfig('asperience_addresscomplete/addresscomplete/google_maps')) :?>
     var registerGoogleAddressAutocomplete = new GoogleAddressAutocomplete('zip', 'city', 'region_id', 'region', 'country', 'img_wait', 'street_1', 'street_2',
  		 	'formatted_address', 'lat', 'long', 'url', registerSearchZipCode,false);
     google.maps.event.addListener(registerGoogleAddressAutocomplete.autocompleteAddress, "place_changed", function() { registerGoogleAddressAutocomplete.fillInAddress(); });
 
-    Event.observe(registerGoogleAddressAutocomplete.fStreet1,'focus', function(event) {registerGoogleAddressAutocomplete.setAutocompleteCountry();});
+    Event.observe(registerGoogleAddressAutocomplete.fStreet1,'focus', function(event) {registerGoogleAddressAutocomplete.street1Focus();});
     Event.observe(registerGoogleAddressAutocomplete.fCountry,'change', function(event) {registerGoogleAddressAutocomplete.setAutocompleteCountry();});
 <?php endif; ?>
 //]]>

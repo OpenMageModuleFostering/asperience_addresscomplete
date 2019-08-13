@@ -61,7 +61,6 @@
                         <div class="input-box">
                             <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international required-entry" />
 		                    <div id="billing:address_autocomplete" class="address-autocomplete"></div>
-			                <div id="billing:alert" style="display:none;" class="validation-advice"><?php echo $this->__('The zip code is incorrect.') ?></div>
 			            </div>
 		                <span id="billing:img_wait" style="display:none;" class="opc-please-wait">
 					    	<br/><img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle" alt="" />&nbsp;<?php echo $this->__('Current address search...') ?>
@@ -194,7 +193,7 @@
 	// Asperience_Addresscomplete : Javascipt
     var billingSearchZipCode = new SearchZipCode('co-billing-form', 'billing:postcode', 'billing:city', 'billing:region_id', 'billing:country_id', 'billing:img_wait', 
 		'billing:address_autocomplete', '<?php echo $this->__('Zip code search...') ?>', '<?php echo $this->helper('addresscomplete')->getCountryUrl() ?>',
-	    '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', 'billing:alert',false
+	    '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', false
 	);
     
 <?php if (Mage::getStoreConfig('asperience_addresscomplete/addresscomplete/google_maps')) :?>
@@ -202,7 +201,7 @@
 	 	'billing:formatted_address', 'billing:lat', 'billing:long', 'billing:url', billingSearchZipCode,false);
     google.maps.event.addListener(billingGoogleAddressAutocomplete.autocompleteAddress, "place_changed", function(event) { billingGoogleAddressAutocomplete.fillInAddress(event); });
 
-    Event.observe(billingGoogleAddressAutocomplete.fStreet1,'focus', function(event) {billingGoogleAddressAutocomplete.setAutocompleteCountry();});
+    Event.observe(billingGoogleAddressAutocomplete.fStreet1,'focus', function(event) {billingGoogleAddressAutocomplete.street1Focus();});
     Event.observe(billingGoogleAddressAutocomplete.fCountry,'change', function(event) {billingGoogleAddressAutocomplete.setAutocompleteCountry();});
 <?php endif; ?> 
 //]]>

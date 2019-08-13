@@ -60,7 +60,6 @@
                             <div class="input-box">
                                 <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international required-entry" onchange="shipping.setSameAsBilling(false);" />
 	                            <div id="shipping:address_autocomplete" class="address-autocomplete"></div>
-					            <div id="shipping:alert" style="display:none;" class="validation-advice"><?php echo $this->__('The zip code is incorrect.') ?></div>
 				            </div>
 				            <span id="shipping:img_wait" style="display:none;" class="opc-please-wait">
 						    	<br/><img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle" alt="" />&nbsp;<?php echo $this->__('Current address search...') ?> 
@@ -145,14 +144,14 @@
     // Asperience_Addresscomplete : Javascipt
     var shippingSearchZipCode = new SearchZipCode('co-shipping-form', 'shipping:postcode', 'shipping:city', 'shipping:region_id', 'shipping:country_id', 'shipping:img_wait', 
 		'shipping:address_autocomplete', '<?php echo $this->__('Zip code search...') ?>', '<?php echo $this->helper('addresscomplete')->getCountryUrl() ?>',
-	    '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', 'shipping:alert',false
+	    '<?php echo $this->helper('addresscomplete')->getSuggestUrl() ?>', '<?php echo $this->helper('addresscomplete')->getRegionUrl() ?>', false
 	);
 <?php if (Mage::getStoreConfig('asperience_addresscomplete/addresscomplete/google_maps')) :?>
     var shippingGoogleAddressAutocomplete = new GoogleAddressAutocomplete('shipping:postcode', 'shipping:city', 'shipping:region_id', 'shipping:region', 'shipping:country_id', 'shipping:img_wait',  'shipping:street1', 'shipping:street2',
 	 	'shipping:formatted_address', 'shipping:lat', 'shipping:long', 'shipping:url', shippingSearchZipCode,false);
     google.maps.event.addListener(shippingGoogleAddressAutocomplete.autocompleteAddress, "place_changed", function() { shippingGoogleAddressAutocomplete.fillInAddress(); });
 
-    Event.observe(shippingGoogleAddressAutocomplete.fStreet1,'focus', function(event) {shippingGoogleAddressAutocomplete.setAutocompleteCountry();});
+    Event.observe(shippingGoogleAddressAutocomplete.fStreet1,'focus', function(event) {shippingGoogleAddressAutocomplete.street1Focus();});
     Event.observe(shippingGoogleAddressAutocomplete.fCountry,'change', function(event) {shippingGoogleAddressAutocomplete.setAutocompleteCountry();});
 <?php endif; ?>
 //]]>
