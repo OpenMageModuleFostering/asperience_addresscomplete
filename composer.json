@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Asperience_Addresscomplete",
+    "type": "magento-module",
+    "license": "Open-Software-License-(OSL-3.0)",
+    "homepage": "",
+    "description": "Module permettant d'auto-compléter les adresses du frontend à partir du code postal.",
+    "authors": [
+    {
+        "name": "Jean-S\u00e9bastien Hederer",
+        "email": "hedererjs@asperience.fr"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
